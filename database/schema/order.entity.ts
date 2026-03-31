@@ -1,0 +1,15 @@
+import { pgTable, uuid, json, integer, varchar, timestamp } from 'drizzle-orm/pg-core';
+import { userTable } from "@entity/user.entity";
+
+export const orderTable = pgTable('orders', {
+  id: uuid().primaryKey(),
+  userId: uuid('user_id').references(() => userTable.id),
+  items: json(),
+  total: integer(),
+  discount: integer(),
+  subtotal: integer(),
+  shippingAddress: varchar('shipping_address'),
+  billingAddress: varchar('billing_address'),
+  created: timestamp(),
+  modified: timestamp(),
+});
