@@ -1,4 +1,4 @@
-import { pgTable, uuid, json, integer, varchar, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, json, integer, varchar, timestamp, index } from 'drizzle-orm/pg-core';
 import { userTable } from "@schema/user";
 
 export const orderTable = pgTable('orders', {
@@ -12,4 +12,6 @@ export const orderTable = pgTable('orders', {
   billingAddress: varchar('billing_address'),
   created: timestamp(),
   modified: timestamp(),
-});
+}, (table) => [
+  index('order_items_index').on(table.items).using('gin')
+]);

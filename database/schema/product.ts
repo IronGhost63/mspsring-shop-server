@@ -1,5 +1,4 @@
-import { index } from "drizzle-orm/gel-core";
-import { pgTable, uuid, varchar, text, integer } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, text, integer, index } from 'drizzle-orm/pg-core';
 
 export const productTable = pgTable('products', {
   id: uuid().primaryKey(),
