@@ -2,7 +2,7 @@ import { pgTable, uuid, jsonb, integer, varchar, timestamp, index } from 'drizzl
 import { userTable } from "@schema/user";
 
 export const orderTable = pgTable('orders', {
-  id: uuid().primaryKey(),
+  id: uuid().primaryKey().defaultRandom(),
   userId: uuid('user_id').references(() => userTable.id),
   items: jsonb().notNull(),
   total: integer(),

@@ -23,7 +23,8 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@schema/*": ["./database/schema/*"],
-      "@src/*": ["./src/*"]
+      "@src/*": ["./src/*"],
+      "@enum/*": ["./src/enum/*"]
     }
   }
 }
