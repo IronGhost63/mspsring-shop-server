@@ -22,7 +22,8 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@entity/*": ["./database/schema/*"],
+      "@schema/*": ["./database/schema/*"],
+      "@src/*": ["./src/*"]
     }
   }
 }

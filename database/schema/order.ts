@@ -1,5 +1,5 @@
 import { pgTable, uuid, json, integer, varchar, timestamp } from 'drizzle-orm/pg-core';
-import { userTable } from "@entity/user.entity";
+import { userTable } from "@schema/user";
 
 export const orderTable = pgTable('orders', {
   id: uuid().primaryKey(),
