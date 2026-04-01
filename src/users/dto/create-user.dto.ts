@@ -7,7 +7,7 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmpty()
-  passowrd: string;
+  password: string;
 
   @IsNotEmpty()
   name: string;

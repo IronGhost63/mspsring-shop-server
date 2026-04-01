@@ -1,4 +1,5 @@
 import { pgTable, uuid, varchar, text, integer, index } from 'drizzle-orm/pg-core';
+import { type InferSelectModel, type InferInsertModel } from 'drizzle-orm';
 
 export const productTable = pgTable('products', {
   id: uuid().primaryKey().defaultRandom(),
@@ -9,3 +10,6 @@ export const productTable = pgTable('products', {
 }, (table) => [
   index('product_name_index').on(table.title)
 ]);
+
+export type SelectProduct = InferSelectModel<typeof productTable>;
+export type InsertProduct = InferInsertModel<typeof productTable>;

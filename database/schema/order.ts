@@ -1,4 +1,5 @@
 import { pgTable, uuid, jsonb, integer, varchar, timestamp, index } from 'drizzle-orm/pg-core';
+import { type InferSelectModel, type InferInsertModel } from 'drizzle-orm';
 import { userTable } from "@schema/user";
 
 export const orderTable = pgTable('orders', {
@@ -15,3 +16,6 @@ export const orderTable = pgTable('orders', {
 }, (table) => [
   index('order_items_index').using('gin', table.items)
 ]);
+
+export type SelectOrder = InferSelectModel<typeof orderTable>;
+export type InsertOrder = InferInsertModel<typeof orderTable>;
