@@ -2,8 +2,6 @@ import { BadRequestException, UnauthorizedException, Logger, Injectable } from "
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Response } from "express";
-import ms from 'ms';
 import { schema } from "database/schema";
 import { User } from "@schema/user";
 import { UsersService } from "@src/users/users.service";
