@@ -7,5 +7,5 @@ export const optionTable = pgTable('options', {
   value: text(),
 });
 
-export type SelectOption = InferSelectModel<typeof optionTable>;
-export type InsertOption = InferInsertModel<typeof optionTable>;
+export type Option = InferSelectModel<typeof optionTable>;
+// export type InsertOption = InferInsertModel<typeof optionTable>;

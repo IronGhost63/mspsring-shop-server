@@ -1,4 +1,4 @@
-import { Injectable, Inject, Logger, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, Inject, Logger, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -32,7 +32,7 @@ export class UsersService {
     } catch ( error ) {
       this.logger.error(`Failed to create user: ${error.cause.detail}`);
 
-      throw new InternalServerErrorException(error.cause.detail);
+      throw new BadRequestException(error.cause.detail);
     }
   }
 
@@ -44,7 +44,7 @@ export class UsersService {
     } catch ( error ) {
       this.logger.error(`Failed to select users: ${error.cause.detail}`);
 
-      throw new InternalServerErrorException( error.cause.detail );
+      throw new BadRequestException( error.cause.detail );
     }
   }
 
@@ -55,14 +55,32 @@ export class UsersService {
       });
 
       if (!result) {
-        throw new InternalServerErrorException( `Unable to find user id ${id}` );
+        throw new BadRequestException( `Unable to find user id ${id}` );
       }
 
       return result;
     } catch ( error ) {
       this.logger.error(`Failed to select user: ${error.cause.detail}`);
 
-      throw new InternalServerErrorException( `Unable to find user id ${id}` );
+      throw new BadRequestException( `Unable to find user id ${id}` );
+    }
+  }
+
+  async findOneByEmail(email: string) {
+    try {
+      const result = await this.db.query.userTable.findFirst({
+        where: eq( schema.userTable.email, email ),
+      });
+
+      if (!result) {
+        throw new BadRequestException( `Unable to find user email ${email}` );
+      }
+
+      return result;
+    } catch ( error ) {
+      this.logger.error(`Failed to select user: ${error.cause.detail}`);
+
+      throw new BadRequestException( `Unable to find user email ${email}` );
     }
   }
 
@@ -80,14 +98,14 @@ export class UsersService {
       });
 
       if (!updated) {
-        throw new InternalServerErrorException( `Unable to update detail for ${id}` );
+        throw new BadRequestException( `Unable to update detail for ${id}` );
       }
 
       return updated;
     } catch ( error ) {
       this.logger.error(`Failed to update user: ${error.cause}`);
 
-      throw new InternalServerErrorException( `Unable to update detail for ${id}` );
+      throw new BadRequestException( `Unable to update detail for ${id}` );
     }
   }
 
@@ -103,7 +121,7 @@ export class UsersService {
     } catch ( error ) {
       this.logger.error(`Failed to delete user: ${error.cause}`);
 
-      throw new InternalServerErrorException( `Unable to delete user ${id}` );
+      throw new BadRequestException( `Unable to delete user ${id}` );
     }
   }
 }

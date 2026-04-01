@@ -17,5 +17,5 @@ export const orderTable = pgTable('orders', {
   index('order_items_index').using('gin', table.items)
 ]);
 
-export type SelectOrder = InferSelectModel<typeof orderTable>;
-export type InsertOrder = InferInsertModel<typeof orderTable>;
+export type Order = InferSelectModel<typeof orderTable>;
+// export type InsertOrder = InferInsertModel<typeof orderTable>;

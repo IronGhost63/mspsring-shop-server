@@ -11,5 +11,5 @@ export const productTable = pgTable('products', {
   index('product_name_index').on(table.title)
 ]);
 
-export type SelectProduct = InferSelectModel<typeof productTable>;
-export type InsertProduct = InferInsertModel<typeof productTable>;
+export type Product = InferSelectModel<typeof productTable>;
+// export type InsertProduct = InferInsertModel<typeof productTable>;
