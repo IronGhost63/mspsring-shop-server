@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from "@nestjs/passport";
+import { Throttle } from "@nestjs/throttler";
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -14,6 +15,12 @@ import { UserRole } from "@src/enum/userRole";
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  @Throttle({
+    default: {
+      limit: 6,
+      ttl: 60000,
+    },
+  })
   @Roles(UserRole.ADMIN, UserRole.USER)
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
