@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, UseInterceptors, BadRequestException } from '@nestjs/common';
 import { AuthGuard } from "@nestjs/passport";
 import { Throttle } from '@nestjs/throttler';
 import { UsersService } from './users.service';
@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from "@src/auth/decorators/role.decorator";
 import { RolesGuard } from "@src/auth/guards/role.guard";
+import { JwtInterceptor } from "@src/auth/interceptors/jwt.interceptor";
 import { UserRole } from "@src/enum/userRole";
 
 @Controller('users')
@@ -24,6 +25,7 @@ export class UsersController {
   }
 
   @UseGuards( AuthGuard('jwt') )
+  @UseInterceptors( JwtInterceptor )
   @Get()
   async findAll( @Request() req ) {
     if ( req.user.role === UserRole.ADMIN ) {
@@ -37,6 +39,8 @@ export class UsersController {
     }
   }
 
+  @UseGuards( AuthGuard('jwt') )
+  @UseInterceptors( JwtInterceptor )
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);

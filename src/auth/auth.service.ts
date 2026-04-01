@@ -40,28 +40,28 @@ export class AuthService {
     };
 
     const accessSecret = this.configService.get<string>('JWT_SECRET')
-    const refreshSecret = this.configService.get<string>('JWT_REFRESH_SECRET');
+    // const refreshSecret = this.configService.get<string>('JWT_REFRESH_SECRET');
 
     const accessTokenExpire = this.configService.getOrThrow('JWT_EXPIRE');
-    const refreshTokenExpire = this.configService.getOrThrow('JWT_REFRESH_EXPIRE');
+    // const refreshTokenExpire = this.configService.getOrThrow('JWT_REFRESH_EXPIRE');
 
     const accessToken = this.jwtService.sign(payload, {
       secret: accessSecret,
       expiresIn: accessTokenExpire
     });
 
-    const refreshToken = this.jwtService.sign(payload, {
-      secret: refreshSecret,
-      expiresIn: refreshTokenExpire
-    });
+    // const refreshToken = this.jwtService.sign(payload, {
+    //   secret: refreshSecret,
+    //   expiresIn: refreshTokenExpire
+    // });
 
-    await this.usersService.update(user.id, {
-      refreshToken: await bcrypt.hash(refreshToken, 10),
-    })
+    // await this.usersService.update(user.id, {
+    //   refreshToken: await bcrypt.hash(refreshToken, 10),
+    // })
 
     return {
       access_token: accessToken,
-      refresh_token: refreshToken,
+      // refresh_token: refreshToken,
     };
   }
 
