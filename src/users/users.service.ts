@@ -1,4 +1,4 @@
-import { Injectable, Inject, Logger, InternalServerErrorException, BadRequestException } from '@nestjs/common';
+import { Injectable, Inject, Logger, BadRequestException } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { CreateUserDto } from './dto/create-user.dto';
