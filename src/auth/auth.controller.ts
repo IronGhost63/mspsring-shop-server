@@ -1,6 +1,6 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { AuthGuard } from "@nestjs/passport";
 import { AuthService } from './auth.service';
-import { SignInDto } from "./dto/signin.dto";
 import { Public } from "./decorators/public.decorator";
 
 @Public()
@@ -8,15 +8,9 @@ import { Public } from "./decorators/public.decorator";
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login( @Body() credential: SignInDto) {
-    try {
-      const user = await this.authService.validateUser(credential.email, credential.password);
-      const accessToken = await this.authService.login(user);
-
-      return {accessToken}
-    } catch( error ) {
-      throw new BadRequestException(error.message);
-    }
+  async login( @Request() req ) {
+    return this.authService.login(req.user);
   }
 }
