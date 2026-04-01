@@ -1,4 +1,4 @@
-import { pgTable, pgEnum, uuid, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, pgEnum, uuid, varchar, text } from 'drizzle-orm/pg-core';
 import { type InferSelectModel, type InferInsertModel } from 'drizzle-orm';
 import { UserRole } from "@enum/userRole";
 import { enumToPgEnum } from "@src/helpers";
@@ -12,6 +12,7 @@ export const userTable = pgTable('users', {
   name: varchar(),
   shippingAddress: varchar('shipping_address'),
   billingAddress: varchar('billing_address'),
+  refreshToken: text('refresh_token'),
   role: rolePgEnum().default(UserRole.USER)
 })
 

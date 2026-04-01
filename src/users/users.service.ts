@@ -94,7 +94,7 @@ export class UsersService {
     }
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: Partial<UpdateUserDto>) {
     try {
       delete updateUserDto.role;
 

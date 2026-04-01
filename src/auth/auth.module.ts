@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { LocalStrategy } from "./strategies/local.strategy";
 import { JwtStrategy } from "./strategies/jwt.strategy";
+import { StringValue } from "ms";
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: '30m',
+          expiresIn: configService.get<StringValue>('JWT_SECRET_EXPIRE'),
         },
       }),
       inject: [ConfigService],
