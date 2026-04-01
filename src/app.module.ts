@@ -5,7 +5,6 @@ import { ConfigModule } from "@nestjs/config";
 import { DrizzleModule } from "./drizzle/drizzle.module";
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { JwtGuard } from '@src/auth/guards/jwt.guard';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
@@ -34,10 +33,6 @@ import { OptionsModule } from './options/options.module';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard
-    },
-    {
-      provide: APP_GUARD,
-      useClass: JwtGuard
     }
   ],
 })

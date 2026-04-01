@@ -58,7 +58,6 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    console.log(`id: ${id}`)
     try {
       const result = await this.db.query.userTable.findFirst({
         where: eq( schema.userTable.id, id ),

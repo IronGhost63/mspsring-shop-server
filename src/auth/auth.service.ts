@@ -1,14 +1,17 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, UnauthorizedException, Logger, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Response } from "express";
 import ms from 'ms';
+import { schema } from "database/schema";
 import { User } from "@schema/user";
 import { UsersService } from "@src/users/users.service";
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -31,7 +34,7 @@ export class AuthService {
     return user;
   }
 
-  async login(user: User, response: Response) {
+  async login(user: User) {
     const payload = {
       id: user.id,
       email: user.email,
@@ -43,9 +46,6 @@ export class AuthService {
 
     const accessTokenExpire = this.configService.getOrThrow('JWT_EXPIRE');
     const refreshTokenExpire = this.configService.getOrThrow('JWT_REFRESH_EXPIRE');
-
-    const expiresCookieAccessToken = new Date(Date.now() + ms(accessTokenExpire));
-    const expiresCookieRefreshToken = new Date(Date.now() + ms(refreshTokenExpire));
 
     const accessToken = this.jwtService.sign(payload, {
       secret: accessSecret,
@@ -61,19 +61,34 @@ export class AuthService {
       refreshToken: await bcrypt.hash(refreshToken, 10),
     })
 
-    response.cookie('AccessToken', accessToken, {
-      httpOnly: true,
-      expires: expiresCookieAccessToken,
-    });
-
-    response.cookie('RefreshToken', refreshToken, {
-      httpOnly: true,
-      expires: expiresCookieRefreshToken,
-    })
-
-    return response.json({
+    return {
       access_token: accessToken,
       refresh_token: refreshToken,
-    });
+    };
+  }
+
+  async verifyUserRefreshToken(
+    refreshToken: string,
+    userId: string,
+  ): Promise<Omit<typeof schema.userTable.$inferSelect, 'password'>> {
+    try {
+      const user = await this.usersService.findOne(userId);
+
+      if ( !user.refreshToken ) {
+        throw new UnauthorizedException();
+      }
+
+      const refreshTokenMatches = bcrypt.compareSync( refreshToken, user.refreshToken );
+
+      if (!refreshTokenMatches) {
+        throw new UnauthorizedException();
+      }
+
+      return user;
+    } catch (error) {
+      this.logger.error('Verify user refresh token error', error);
+
+      throw new UnauthorizedException('Refresh token is not valid');
+    }
   }
 }
