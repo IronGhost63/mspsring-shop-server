@@ -38,7 +38,16 @@ export class UsersService {
 
   async findAll() {
     try {
-      const results = await this.db.select().from(schema.userTable);
+      const results = await this.db.query.userTable.findMany({
+        columns: {
+          id: true,
+          email: true,
+          name: true,
+          shippingAddress: true,
+          billingAddress: true,
+          role: true,
+        },
+      })
 
       return results;
     } catch ( error ) {
@@ -49,6 +58,7 @@ export class UsersService {
   }
 
   async findOne(id: string) {
+    console.log(`id: ${id}`)
     try {
       const result = await this.db.query.userTable.findFirst({
         where: eq( schema.userTable.id, id ),
