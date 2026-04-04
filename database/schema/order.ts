@@ -11,8 +11,8 @@ export const orderTable = pgTable('orders', {
   subtotal: integer(),
   shippingAddress: varchar('shipping_address'),
   billingAddress: varchar('billing_address'),
-  created: timestamp(),
-  modified: timestamp(),
+  created: timestamp().defaultNow(),
+  modified: timestamp().defaultNow(),
 }, (table) => [
   index('order_items_index').using('gin', table.items)
 ]);

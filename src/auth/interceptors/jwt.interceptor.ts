@@ -1,12 +1,12 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor, Inject, forwardRef } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor, Inject } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
 import { UsersService } from "@src/users/users.service";
-import { AuthService } from "../auth.service";
+import { AuthService } from "@src/auth/auth.service";
 
 @Injectable()
 export class JwtInterceptor implements NestInterceptor {
   constructor(
-    @Inject(forwardRef(() => AuthService))
+    @Inject(AuthService)
     private authService: AuthService,
     private usersService: UsersService
   ){}

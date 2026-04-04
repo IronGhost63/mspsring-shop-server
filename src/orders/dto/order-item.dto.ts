@@ -3,7 +3,7 @@ import { IsNotEmpty, IsUUID } from "class-validator";
 export class OrderItemDto {
   @IsNotEmpty()
   @IsUUID()
-  product_id: string;
+  id: string;
 
   @IsNotEmpty()
   title: string;

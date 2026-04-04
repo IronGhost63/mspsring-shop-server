@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, text, integer, index } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, text, integer, timestamp, index } from 'drizzle-orm/pg-core';
 import { type InferSelectModel, type InferInsertModel } from 'drizzle-orm';
 
 export const productTable = pgTable('products', {
@@ -7,6 +7,7 @@ export const productTable = pgTable('products', {
   description: text(),
   unit_price: integer().default(0),
   stock: integer().default(0),
+  created: timestamp().defaultNow().notNull()
 }, (table) => [
   index('product_name_index').on(table.title)
 ]);
