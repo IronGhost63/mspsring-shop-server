@@ -6,6 +6,7 @@ export const productTable = pgTable('products', {
   title: varchar().notNull(),
   description: text(),
   unit_price: integer().default(0),
+  preview_image: varchar(),
   stock: integer().default(0),
   created: timestamp('created', { precision: 3 }).defaultNow().notNull()
 }, (table) => [

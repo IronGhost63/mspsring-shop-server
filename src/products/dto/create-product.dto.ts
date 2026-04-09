@@ -10,6 +10,8 @@ export class CreateProductDto {
   @IsNumber()
   unit_price: number;
 
+  preview_image?: string;
+
   @IsNotEmpty()
   @IsNumber()
   stock: number;

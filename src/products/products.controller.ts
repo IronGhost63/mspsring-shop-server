@@ -1,4 +1,5 @@
-import { Controller, Query, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Query, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthGuard } from "@nestjs/passport";
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -14,10 +15,25 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseInterceptors(FileInterceptor('preview_image'))
   @Roles(UserRole.ADMIN)
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  create(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFile() cover: Express.Multer.File
+  ) {
+    const payload = new CreateProductDto();
+
+    payload.title = createProductDto.title;
+    payload.description = createProductDto.description;
+    payload.unit_price = createProductDto.unit_price;
+    payload.stock = createProductDto.stock;
+
+    if ( cover ) {
+      payload.preview_image = cover.filename;
+    }
+
+    return this.productsService.create(payload);
   }
 
   @Get()
