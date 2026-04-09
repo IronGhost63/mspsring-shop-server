@@ -36,8 +36,10 @@ export class JwtInterceptor implements NestInterceptor {
 
         return {
           message: 'success',
+          statusCode: response.statusCode,
           timestamp: new Date().toISOString(),
           accessExpire: new Date(Date.now() + ms(accessTokenExpire)),
+          accessToken: accessToken.access_token,
           data: await data,
         }
       }),

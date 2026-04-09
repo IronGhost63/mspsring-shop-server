@@ -9,6 +9,12 @@ async function bootstrap() {
 
   app.use(cookieParser());
 
+  app.enableCors({
+    origin: [process.env.SITE_URL!],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
   app.useStaticAssets(
     join(__dirname, '../..', 'uploads'),
     {
