@@ -1,5 +1,4 @@
 import { Module, Global } from '@nestjs/common';
-import { APP_INTERCEPTOR } from "@nestjs/core";
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from "@nestjs/jwt";
 import { type StringValue } from "ms";
@@ -8,7 +7,6 @@ import { AuthController } from './auth.controller';
 import { LocalStrategy } from "./strategies/local.strategy";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { JwtRefreshStrategy } from "./strategies/jwt-refresh.strategy";
-import { JwtInterceptor } from "./interceptors/jwt.interceptor";
 
 @Global()
 @Module({
@@ -30,10 +28,6 @@ import { JwtInterceptor } from "./interceptors/jwt.interceptor";
     LocalStrategy,
     JwtStrategy,
     JwtRefreshStrategy,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: JwtInterceptor,
-    },
   ],
   exports: [AuthService, JwtModule]
 })

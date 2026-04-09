@@ -30,9 +30,9 @@ export class UsersService {
 
       return user;
     } catch ( error ) {
-      this.logger.error(`Failed to create user: ${error.cause.detail}`);
+      this.logger.error(`Failed to create user: ${error}`);
 
-      throw new BadRequestException(error.cause.detail);
+      throw new BadRequestException(error);
     }
   }
 
@@ -47,13 +47,13 @@ export class UsersService {
           billingAddress: true,
           role: true,
         },
-      })
+      });
 
       return results;
     } catch ( error ) {
-      this.logger.error(`Failed to select users: ${error.cause.detail}`);
+      this.logger.error(`Failed to select users: ${error}`);
 
-      throw new BadRequestException( error.cause.detail );
+      throw new BadRequestException( error );
     }
   }
 
@@ -69,7 +69,7 @@ export class UsersService {
 
       return result;
     } catch ( error ) {
-      this.logger.error(`Failed to select user: ${error.cause.detail}`);
+      this.logger.error(`Failed to select user: ${error}`);
 
       throw new BadRequestException( `Unable to find user id ${id}` );
     }
@@ -87,7 +87,7 @@ export class UsersService {
 
       return result;
     } catch ( error ) {
-      this.logger.error(`Failed to select user: ${error.cause.detail}`);
+      this.logger.error(`Failed to select user: ${error}`);
 
       throw new BadRequestException( `Unable to find user email ${email}` );
     }
@@ -95,8 +95,6 @@ export class UsersService {
 
   async update(id: string, updateUserDto: Partial<UpdateUserDto>) {
     try {
-      delete updateUserDto.role;
-
       await this.db
         .update( schema.userTable )
         .set( updateUserDto )
@@ -112,7 +110,7 @@ export class UsersService {
 
       return updated;
     } catch ( error ) {
-      this.logger.error(`Failed to update user: ${error.cause}`);
+      this.logger.error(`Failed to update user: ${error}`);
 
       throw new BadRequestException( `Unable to update detail for ${id}` );
     }
@@ -128,7 +126,7 @@ export class UsersService {
         message: 'success'
       }
     } catch ( error ) {
-      this.logger.error(`Failed to delete user: ${error.cause}`);
+      this.logger.error(`Failed to delete user: ${error}`);
 
       throw new BadRequestException( `Unable to delete user ${id}` );
     }

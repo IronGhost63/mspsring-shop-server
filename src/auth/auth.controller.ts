@@ -1,9 +1,10 @@
-import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Post, UseGuards, Res } from '@nestjs/common';
 import { AuthGuard } from "@nestjs/passport";
+import { type Response } from "express";
 import { AuthService } from './auth.service';
 import { Public } from "./decorators/public.decorator";
 import { CurrentUser } from "./decorators/current-user.decorator";
-import { type User } from "@schema/user";
+import { schema } from "database/schema";
 
 @Public()
 @Controller('auth')
@@ -13,16 +14,18 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(
-    @Request() req
+    // @Request() req
+    @CurrentUser() user: typeof schema.userTable.$inferSelect,
+    @Res({ passthrough: true }) response: Response,
   ) {
-    return this.authService.login(req.user);
+    return this.authService.login(user, response);
   }
 
-  @UseGuards(AuthGuard('jwt-refresh'))
-  @Post('refresh')
-  async refresh(
-    @CurrentUser() user: User,
-  ) {
-    return await this.authService.login(user);
-  }
+  // @UseGuards(AuthGuard('jwt-refresh'))
+  // @Post('refresh')
+  // async refresh(
+  //   @CurrentUser() user: User,
+  // ) {
+  //   return await this.authService.login(user);
+  // }
 }

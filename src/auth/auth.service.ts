@@ -2,6 +2,8 @@ import { BadRequestException, UnauthorizedException, Logger, Injectable } from "
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Response } from "express";
+import ms from "ms";
 import { schema } from "database/schema";
 import { User } from "@schema/user";
 import { UsersService } from "@src/users/users.service";
@@ -32,7 +34,7 @@ export class AuthService {
     return user;
   }
 
-  async login(user: User) {
+  async login(user: User, response: Response) {
     const payload = {
       id: user.id,
       email: user.email,
@@ -58,6 +60,12 @@ export class AuthService {
     // await this.usersService.update(user.id, {
     //   refreshToken: await bcrypt.hash(refreshToken, 10),
     // })
+
+    response.cookie('Authentication', accessToken, {
+      httpOnly: true,
+      secure: this.configService.get('NODE_ENV') === 'production',
+      expires: new Date(Date.now() + ms(accessTokenExpire)),
+    });
 
     return {
       access_token: accessToken,

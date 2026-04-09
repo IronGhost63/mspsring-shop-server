@@ -42,11 +42,10 @@ export class ProductsService {
         .orderBy( this.condition[criteria.order](schema.productTable.created) );
 
       return results;
-
     } catch ( error ) {
-      this.logger.error(`Failed to create product: ${error.cause.detail}`);
+      this.logger.error(`Failed to create product: ${error}`);
 
-      throw new BadRequestException(error.cause.detail);
+      throw new BadRequestException(error);
     }
   }
 

@@ -7,7 +7,7 @@ export const productTable = pgTable('products', {
   description: text(),
   unit_price: integer().default(0),
   stock: integer().default(0),
-  created: timestamp().defaultNow().notNull()
+  created: timestamp('created', { precision: 3 }).defaultNow().notNull()
 }, (table) => [
   index('product_name_index').on(table.title)
 ]);
